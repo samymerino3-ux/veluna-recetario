@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veluna Café · Recetario del Barista</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --azul-noche: #0f1e3d;
+        --azul-profundo: #1a2a4a;
+        --azul-medio: #2d4263;
+        --azul-claro: #5b7ba5;
+        --blanco-luna: #f5f5f0;
+        --amarillo-luna: #f4e4a1;
+        --dorado: #e8d59a;
+        --gris-suave: rgba(245, 245, 240, 0.7);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Quicksand', sans-serif;
+        background: var(--azul-noche);
+        color: var(--blanco-luna);
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* FONDO ESTRELLAS */
+    .stars-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .star {
+        position: absolute;
+        background: var(--blanco-luna);
+        border-radius: 50%;
+        opacity: 0;
+        animation: twinkle 3s infinite;
+    }
+
+    .star:nth-child(1) { width: 2px; height: 2px; top: 10%; left: 20%; animation-delay: 0s; }
+    .star:nth-child(2) { width: 3px; height: 3px; top: 25%; left: 75%; animation-delay: 0.5s; }
+    .star:nth-child(3) { width: 2px; height: 2px; top: 45%; left: 40%; animation-delay: 1s; }
+    .star:nth-child(4) { width: 3px; height: 3px; top: 60%; left: 85%; animation-delay: 1.5s; }
+    .star:nth-child(5) { width: 2px; height: 2px; top: 75%; left: 15%; animation-delay: 2s; }
+    .star:nth-child(6) { width: 2px; height: 2px; top: 30%; left: 55%; animation-delay: 0.8s; }
+    .star:nth-child(7) { width: 3px; height: 3px; top: 80%; left: 65%; animation-delay: 1.2s; }
+    .star:nth-child(8) { width: 2px; height: 2px; top: 15%; left: 90%; animation-delay: 2.2s; }
+
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.2; }
+        50% { opacity: 1; }
+    }
+
+    /* HEADER */
+    header {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 40px 20px 30px;
+        border-bottom: 3px dashed var(--azul-medio);
+        background: linear-gradient(180deg, #162445 0%, var(--azul-noche) 100%);
+    }
+
+    .logo {
+        font-family: 'Pacifico', cursive;
+        font-size: 2.8rem;
+        color: var(--blanco-luna);
+        text-shadow: 2px 2px 0 var(--azul-medio);
+        letter-spacing: 1px;
+    }
+
+    .logo span {
+        display: block;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--amarillo-luna);
+        margin-top: -5px;
+    }
+
+    .luna-icon {
+        font-size: 2rem;
+        color: var(--amarillo-luna);
+        margin: 0 10px;
+    }
+
+    .subtitle {
+        margin-top: 15px;
+        font-size: 0.95rem;
+        color: var(--gris-suave);
+        font-weight: 500;
+    }
+
+    /* BARRA DE BÚSQUEDA */
+    .search-container {
+        position: relative;
+        z-index: 2;
+        max-width: 700px;
+        margin: 25px auto 0;
+        padding: 0 20px;
+    }
+
+    .search-box {
+        width: 100%;
+        padding: 16px 20px 16px 50px;
+        border: 2px solid var(--azul-medio);
+        border-radius: 50px;
+        background: var(--azul-profundo);
+        color: var(--blanco-luna);
+        font-family: 'Quicksand', sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        outline: none;
+        transition: all 0.3s;
+    }
+
+    .search-box::placeholder {
+        color: var(--gris-suave);
+    }
+
+    .search-box:focus {
+        border-color: var(--amarillo-luna);
+        box-shadow: 0 0 15px rgba(244, 228, 161, 0.3);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 35px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--amarillo-luna);
+        font-size: 1.2rem;
+    }
+
+    /* FILTROS */
+    .filters {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .filter-btn {
+        padding: 10px 18px;
+        background: var(--azul-profundo);
+        border: 2px solid var(--azul-medio);
+        color: var(--blanco-luna);
+        border-radius: 25px;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .filter-btn:hover {
+        border-color: var(--amarillo-luna);
+        transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+        background: var(--amarillo-luna);
+        color: var(--azul-noche);
+        border-color: var(--amarillo-luna);
+    }
+
+    .filter-btn .emoji {
+        font-size: 1.1rem;
+    }
+
+    /* PANEL RÁPIDO DE ESPRESSO */
+    .quick-panel {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    .quick-card {
+        background: linear-gradient(135deg, var(--azul-profundo), var(--azul-medio));
+        border: 2px solid var(--azul-claro);
+        border-radius: 20px;
+        padding: 25px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .quick-card::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 1.5rem;
+        opacity: 0.5;
+    }
+
+    .quick-card h3 {
+        color: var(--amarillo-luna);
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .params-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .param {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 12px 15px;
+        border-radius: 12px;
+        border-left: 3px solid var(--amarillo-luna);
+    }
+
+    .param-label {
+        font-size: 0.8rem;
+        color: var(--gris-suave);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+    }
+
+    .param-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--blanco-luna);
+    }
+
+    /* GRID DE RECETAS */
+    .recipes-section {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px 60px;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .section-header h2 {
+        font-family: 'Pacifico', cursive;
+        font-size: 2rem;
+        color: var(--amarillo-luna);
+        margin-bottom: 5px;
+    }
+
+    .section-header p {
+        color: var(--gris-suave);
+        font-size: 0.95rem;
+    }
+
+    .recipes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .recipe-card {
+        background: var(--azul-profundo);
+        border: 2px solid var(--azul-medio);
+        border-radius: 18px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .recipe-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--amarillo-luna);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .recipe-card.hidden {
+        display: none;
+    }
+
+    .recipe-top {
+        padding: 20px;
+        background: linear-gradient(135deg, var(--azul-medio), var(--azul-profundo));
+        position: relative;
+    }
+
+    .recipe-tag {
+        display: inline-block;
+        padding: 4px 12px;
+        background: var(--amarillo-luna);
+        color: var(--azul-noche);
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .recipe-icon {
+        font-size: 2.5rem;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        opacity: 0.8;
+    }
+
+    .recipe-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--blanco-luna);
+        margin-bottom: 5px;
+    }
+
+    .recipe-desc {
+        font-size: 0.9rem;
+        color: var(--gris-suave);
+        font-style: italic;
+    }
+
+    .recipe-body {
+        padding: 18px 20px 20px;
+    }
+
+    .ingredients-title {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--amarillo-luna);
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .ingredient {
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(91, 123, 165, 0.3);
+        font-size: 0.95rem;
+        color: var(--blanco-luna);
+    }
+
+    .ingredient:last-child {
+        border-bottom: none;
+    }
+
+    .ingredient::before {
+        content: "☕";
+        margin-right: 10px;
+        font-size: 0.9rem;
+        opacity: 0.7;
+    }
+
+    .steps-container {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px dashed var(--azul-medio);
+        display: none;
+    }
+
+    .recipe-card.expanded .steps-container {
+        display: block;
+    }
+
+    .steps-title {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--amarillo-luna);
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .step {
+        display: flex;
+        gap: 10px;
+        padding: 8px 0;
+        font-size: 0.9rem;
+        color: var(--blanco-luna);
+    }
+
+    .step-number {
+        min-width: 24px;
+        height: 24px;
+        background: var(--amarillo-luna);
+        color: var(--azul-noche);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .expand-hint {
+        text-align: center;
+        padding: 10px;
+        font-size: 0.8rem;
+        color: var(--azul-claro);
+        font-weight: 600;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--gris-suave);
+        font-size: 1.1rem;
+        display: none;
+    }
+
+    .no-results.visible {
+        display: block;
+    }
+
+    .no-results .moon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    /* FOOTER */
+    footer {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 30px 20px;
+        border-top: 3px dashed var(--azul-medio);
+        background: #0a1629;
+    }
+
+    footer .luna {
+        font-size: 1.5rem;
+        color: var(--amarillo-luna);
+    }
+
+    footer p {
+        color: var(--gris-suave);
+        font-size: 0.85rem;
+        margin-top: 8px;
+    }
+
+    footer .quote {
+        font-family: 'Pacifico', cursive;
+        font-size: 1rem;
+        color: var(--amarillo-luna);
+        margin-top: 10px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+        .logo {
+            font-size: 2rem;
+        }
+
+        .logo span {
+            font-size: 0.85rem;
+        }
+
+        .filter-btn {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+        }
+
+        .recipe-title {
+            font-size: 1.2rem;
+        }
+
+        .recipes-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- Fondo de estrellas -->
+<div class="stars-bg">
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+</div>
+
+<!-- HEADER -->
+<header>
+    <div class="logo">
+        <span class="luna-icon">🌙</span>
+        Veluna Café
+        <span class="luna-icon">☕</span>
+        <span>Recetario del Barista</span>
+    </div>
+    <p class="subtitle"> Tu guía rápida de preparaciones ☽</p>
+
+    <!-- Búsqueda -->
+    <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-box" id="searchInput" placeholder="Buscar receta... (ej: mocha, latte, cold brew)">
+    </div>
+</header>
+
+<!-- Filtros -->
+<div class="filters">
+    <button class="filter-btn active" data-filter="todas"><span class="emoji">✨</span>Todas</button>
+    <button class="filter-btn" data-filter="caliente"><span class="emoji">☕</span>Calientes</button>
+    <button class="filter-btn" data-filter="fria"><span class="emoji">🧊</span>Frías</button>
+    <button class="filter-btn" data-filter="frappe"><span class="emoji">🥤</span>Frappés</button>
+    <button class="filter-btn" data-filter="coldbrew"><span class="emoji">⏳</span>Cold Brew</button>
+    <button class="filter-btn" data-filter="filtrado"><span class="emoji"></span>Filtrados</button>
+    <button class="filter-btn" data-filter="coctel"><span class="emoji">🍸</span>Coctelería</button>
+    <button class="filter-btn" data-filter="especial"><span class="emoji">🍓</span>Especiales</button>
+</div>
+
+<!-- Panel Rápido Espresso -->
+<div class="quick-panel">
+    <div class="quick-card">
+        <h3>🌙 Parámetros del Espresso Perfecto</h3>
+        <div class="params-grid">
+            <div class="param">
+                <div class="param-label">Dosis</div>
+                <div class="param-value">18 g</div>
+            </div>
+            <div class="param">
+                <div class="param-label">Bebida Final</div>
+                <div class="param-value">36 ml</div>
+            </div>
+            <div class="param">
+                <div class="param-label">Ratio</div>
+                <div class="param-value">1:2</div>
+            </div>
+            <div class="param">
+                <div class="param-label">Preinfusión</div>
+                <div class="param-value">4 segundos</div>
+            </div>
+            <div class="param">
+                <div class="param-label">Extracción</div>
+                <div class="param-value">20-30 seg</div>
+            </div>
+            <div class="param">
+                <div class="param-label">Temperatura</div>
+                <div class="param-value">90-96 °C</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recetas -->
+<section class="recipes-section">
+    <div class="section-header">
+        <h2>☽ Recetas </h2>
+        <p>Toca una tarjeta para ver los pasos</p>
+    </div>
+
+    <div class="recipes-grid" id="recipesGrid">
+
+        <!-- BEBIDAS CALIENTES -->
+        <div class="recipe-card" data-category="caliente" data-name="espresso">
+            <div class="recipe-top">
+                <span class="recipe-tag">Caliente</span>
+                <span class="recipe-icon">☕</span>
+                <div class="recipe-title">Espresso</div>
+                <div class="recipe-desc">Base de todas las preparaciones</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">18 g de café molido</div>
+                <div class="ingredient">36 ml de bebida final</div>
+                <div class="steps-container">
+                    <div class="steps-title">Parámetros</div>
+                    <div class="step"><span class="step-number">1</span> Ratio 1:2 — 1g café = 2ml bebida</div>
+                    <div class="step"><span class="step-number">2</span> Preinfusión 3-5 seg (ideal 4s)</div>
+                    <div class="step"><span class="step-number">3</span> Extracción total: 20-30 seg</div>
+                </div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver pasos</div>
+        </div>
+
+        <div class="recipe-card" data-category="caliente" data-name="macchiato">
+            <div class="recipe-top">
+                <span class="recipe-tag">Caliente</span>
+                <span class="recipe-icon">🤎</span>
+                <div class="recipe-title">Macchiato</div>
+                <div class="recipe-desc">Espresso manchado con leche</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">1 espresso</div>
+                <div class="ingredient">2-3 cucharadas pequeñas de leche texturizada</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver pasos</div>
+        </div>
+
+        <div class="recipe-card" data-category="caliente" data-name="cortado">
+            <div class="recipe-top">
+                <span class="recipe-tag">Caliente</span>
+                <span class="recipe-icon">🥛</span>
+                <div class="recipe-title">Cortado</div>
+                <div class="recipe-desc">Espresso cortado con leche</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">1 espresso</div>
+                <div class="ingredient">1 onza de leche texturizada</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver pasos</div>
+        </div>
+
+        <div class="recipe-card" data-category="caliente" data-name="americano">
+            <div class="recipe-top">
+                <span class="recipe-tag">Caliente</span>
+                <span class="recipe-icon">💧</span>
+                <div class="recipe-title">Americano</div>
+                <div class="recipe-desc">Espresso con agua caliente</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">1 espresso</div>
+                <div class="ingredient">7 onzas de agua caliente</div>
+                <div class="steps-container">
+                    <div class="steps-title">Historia</div>
+                    <div class="step"><span class="step-number"></span>Nació en la Segunda Guerra Mundial cuando soldados estadounidenses añadían agua al espresso italiano.</div>
+                </div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="caliente" data-name="cappuccino">
+            <div class="recipe-top">
+                <span class="recipe-tag">Caliente</span>
+                <span class="recipe-icon">🫧</span>
+                <div class="recipe-title">Cappuccino</div>
+                <div class="recipe-desc">Espresso con leche y microespuma</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">1 espresso</div>
+                <div class="ingredient">6 onzas de leche texturizada</div>
+                <div class="steps-container">
+                    <div class="steps-title">Leche ideal</div>
+                    <div class="step"><span class="step-number"></span>Temperatura 55-65 °C (máx. 70 °C)</div>
+                    <div class="step"><span class="step-number"></span>Microespuma brillante, sin burbujas</div>
+                </div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="caliente" data-name="latte">
+            <div class="recipe-top">
+                <span class="recipe-tag">Caliente</span>
+                <span class="recipe-icon">🥛</span>
+                <div class="recipe-title">Latte</div>
+                <div class="recipe-desc">Espresso con abundante leche cremosa</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">1 espresso</div>
+                <div class="ingredient">7 onzas de leche texturizada (crema ligera)</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="caliente" data-name="mocha">
+            <div class="recipe-top">
+                <span class="recipe-tag">Caliente</span>
+                <span class="recipe-icon">🍫</span>
+                <div class="recipe-title">Mocha</div>
+                <div class="recipe-desc">Espresso con cacao y leche</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">6 g de polvo de cacao</div>
+                <div class="ingredient">1 espresso</div>
+                <div class="ingredient">6 onzas de leche texturizada</div>
+            </div>
+            <div class="expand-hint"> Toca para ver más</div>
+        </div>
+
+        <!-- BEBIDAS FRÍAS -->
+        <div class="recipe-card" data-category="fria" data-name="iced latte">
+            <div class="recipe-top">
+                <span class="recipe-tag">Fría</span>
+                <span class="recipe-icon">🧊</span>
+                <div class="recipe-title">Iced Latte</div>
+                <div class="recipe-desc">Latte helado y cremoso</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">130 g de hielo</div>
+                <div class="ingredient">130 ml de leche</div>
+                <div class="ingredient">1 espresso (36 ml aprox.)</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="fria" data-name="iced mocca">
+            <div class="recipe-top">
+                <span class="recipe-tag">Fría</span>
+                <span class="recipe-icon"></span>
+                <div class="recipe-title">Iced Mocca</div>
+                <div class="recipe-desc">Versión fría del mocha</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">30 g de chocolate</div>
+                <div class="ingredient">1 espresso (36 ml aprox.)</div>
+                <div class="ingredient">120 g de hielo</div>
+                <div class="ingredient">100 ml de leche</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="fria" data-name="iced americano">
+            <div class="recipe-top">
+                <span class="recipe-tag">Fría</span>
+                <span class="recipe-icon">💧</span>
+                <div class="recipe-title">Iced Americano</div>
+                <div class="recipe-desc">Americano frío y refrescante</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">1 espresso (36 ml aprox.)</div>
+                <div class="ingredient">120 g de hielo</div>
+                <div class="ingredient">150 ml de agua</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <!-- ESPECIAL -->
+        <div class="recipe-card" data-category="especial" data-name="strawberry matcha fresa">
+            <div class="recipe-top">
+                <span class="recipe-tag">Especial</span>
+                <span class="recipe-icon"></span>
+                <div class="recipe-title">Strawberry Matcha</div>
+                <div class="recipe-desc">Fusión de matcha con fresa</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">75 ml de syrup de fresa</div>
+                <div class="ingredient">150 g de hielo</div>
+                <div class="ingredient">80 ml de leche</div>
+                <div class="ingredient">3 g de matcha disueltos en 45 ml de agua</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <!-- FRAPPÉS -->
+        <div class="recipe-card" data-category="frappe" data-name="frappuccino">
+            <div class="recipe-top">
+                <span class="recipe-tag">Frappé</span>
+                <span class="recipe-icon">🥤</span>
+                <div class="recipe-title">Frappuccino</div>
+                <div class="recipe-desc">Batido cremoso con fudge</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">2 oz de espresso</div>
+                <div class="ingredient">2 cucharadas de azúcar</div>
+                <div class="ingredient">2 oz de leche</div>
+                <div class="ingredient">1 dash de fudge</div>
+                <div class="ingredient">8-10 cubos de hielo</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="frappe" data-name="frappe mocha">
+            <div class="recipe-top">
+                <span class="recipe-tag">Frappé</span>
+                <span class="recipe-icon"></span>
+                <div class="recipe-title">Frappé de Moca</div>
+                <div class="recipe-desc">Batido helado con cacao y fudge</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">3 oz de fudge</div>
+                <div class="ingredient">4 g de polvo de cacao</div>
+                <div class="ingredient">2 oz de leche</div>
+                <div class="ingredient">1 dash de espresso</div>
+                <div class="ingredient">1 cucharada de azúcar</div>
+                <div class="ingredient">8-10 cubos de hielo</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="frappe" data-name="frappe caramelo">
+            <div class="recipe-top">
+                <span class="recipe-tag">Frappé</span>
+                <span class="recipe-icon">🍬</span>
+                <div class="recipe-title">Frappé de Caramelo</div>
+                <div class="recipe-desc">Dulce batido con caramelo</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">3 oz de caramelo</div>
+                <div class="ingredient">2 oz de leche</div>
+                <div class="ingredient">1 dash de espresso</div>
+                <div class="ingredient">1/2 cucharada de azúcar</div>
+                <div class="ingredient">8-10 cubos de hielo</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="frappe" data-name="frappe algarrobina">
+            <div class="recipe-top">
+                <span class="recipe-tag">Frappé</span>
+                <span class="recipe-icon">🌴</span>
+                <div class="recipe-title">Frappé de Algarrobina</div>
+                <div class="recipe-desc">Batido con algarrobina y caramelo</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">2 oz de algarrobina</div>
+                <div class="ingredient">2 oz de leche</div>
+                <div class="ingredient">2 oz de caramelo</div>
+                <div class="ingredient">8-10 cubos de hielo</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <!-- COLD BREW -->
+        <div class="recipe-card" data-category="coldbrew" data-name="cold brew">
+            <div class="recipe-top">
+                <span class="recipe-tag">Cold Brew</span>
+                <span class="recipe-icon">⏳</span>
+                <div class="recipe-title">Cold Brew</div>
+                <div class="recipe-desc">Infusión en frío de 12-24 horas</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Receta Base</div>
+                <div class="ingredient">100 g de café (molienda gruesa)</div>
+                <div class="ingredient">1000 ml de agua</div>
+                <div class="ingredient">Ratio: 1:10</div>
+                <div class="ingredient">Tiempo: 12-24 horas</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="coldbrew" data-name="cold brew rocas">
+            <div class="recipe-top">
+                <span class="recipe-tag">Cold Brew</span>
+                <span class="recipe-icon"></span>
+                <div class="recipe-title">Cold Brew a las Rocas</div>
+                <div class="recipe-desc">Cold brew servido sobre hielo</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">130 g de hielo</div>
+                <div class="ingredient">180 ml de cold brew</div>
+            </div>
+            <div class="expand-hint"> Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="coldbrew" data-name="orange cold brew naranja">
+            <div class="recipe-top">
+                <span class="recipe-tag">Cold Brew</span>
+                <span class="recipe-icon">🍊</span>
+                <div class="recipe-title">Orange Cold Brew</div>
+                <div class="recipe-desc">Cold brew con zumo de naranja</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">140 g de hielo</div>
+                <div class="ingredient">100 ml de zumo de naranja</div>
+                <div class="ingredient">80 ml de cold brew</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <div class="recipe-card" data-category="coldbrew" data-name="cold brew tonic">
+            <div class="recipe-top">
+                <span class="recipe-tag">Cold Brew</span>
+                <span class="recipe-icon">🫧</span>
+                <div class="recipe-title">Cold Brew Tonic</div>
+                <div class="recipe-desc">Cold brew con agua tónica</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">140 g de hielo</div>
+                <div class="ingredient">100 ml de agua tónica</div>
+                <div class="ingredient">80 ml de cold brew</div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver más</div>
+        </div>
+
+        <!-- FILTRADO V60 -->
+        <div class="recipe-card" data-category="filtrado" data-name="v60 filtrado">
+            <div class="recipe-top">
+                <span class="recipe-tag">Filtrado</span>
+                <span class="recipe-icon">🫖</span>
+                <div class="recipe-title">Método V60</div>
+                <div class="recipe-desc">Filtrado manual con acidez brillante</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Parámetros</div>
+                <div class="ingredient">Café: 15 g</div>
+                <div class="ingredient">Agua: 225 ml</div>
+                <div class="ingredient">Ratio: 1:15</div>
+                <div class="ingredient">Molienda: Media</div>
+                <div class="ingredient">Temperatura: 93 °C</div>
+                <div class="ingredient">Tiempo: 2:00 - 3:30</div>
+                <div class="steps-container">
+                    <div class="steps-title">Preparación</div>
+                    <div class="step"><span class="step-number">1</span>Preinfusión por 30 seg hasta 45 ml</div>
+                    <div class="step"><span class="step-number">2</span>Segundo vertido hasta 135 ml</div>
+                    <div class="step"><span class="step-number">3</span>Tercer vertido hasta 225 ml</div>
+                </div>
+            </div>
+            <div class="expand-hint">⬇ Toca para ver pasos</div>
+        </div>
+
+        <!-- COCTEL -->
+        <div class="recipe-card" data-category="coctel" data-name="espresso martini">
+            <div class="recipe-top">
+                <span class="recipe-tag">Coctelería</span>
+                <span class="recipe-icon"></span>
+                <div class="recipe-title">Espresso Martini</div>
+                <div class="recipe-desc">Cóctel elegante con vodka y café</div>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-title">Ingredientes</div>
+                <div class="ingredient">1 1/2 oz de vodka</div>
+                <div class="ingredient">1 oz de espresso</div>
+                <div class="ingredient">3/4 oz de licor de café</div>
+                <div class="ingredient">1/4 oz de jarabe de goma</div>
+                <div class="ingredient">6-8 cubos de hielo</div>
+            </div>
+            <div class="expand-hint"> Toca para ver más</div>
+        </div>
+
+    </div>
+
+    <div class="no-results" id="noResults">
+        <span class="moon">🌙</span>
+        <p>No se encontró esa receta...<br>¿Probaste con otro nombre?</p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="luna">🌙 ☕ </div>
+    <p>Veluna Café · Recetario del Barista</p>
+    <p class="quote">"El café es un producto técnico y no improvisado"</p>
+</footer>
+
+<script>
+    // Búsqueda
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.recipe-card');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        let visible = 0;
+
+        cards.forEach(card => {
+            const name = card.getAttribute('data-name');
+            const text = card.textContent.toLowerCase();
+            if (name.includes(query) || text.includes(query)) {
+                card.classList.remove('hidden');
+                visible++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        noResults.classList.toggle('visible', visible === 0);
+    });
+
+    // Filtros
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.getAttribute('data-filter');
+            let visible = 0;
+
+            cards.forEach(card => {
+                if (filter === 'todas' || card.getAttribute('data-category') === filter) {
+                    card.classList.remove('hidden');
+                    visible++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            noResults.classList.toggle('visible', visible === 0);
+            searchInput.value = '';
+        });
+    });
+
+    // Expandir tarjetas
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            const wasExpanded = card.classList.contains('expanded');
+            // Cerrar todas primero
+            cards.forEach(c => c.classList.remove('expanded'));
+            // Si no estaba expandida, expandirla
+            if (!wasExpanded) {
+                card.classList.add('expanded');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
